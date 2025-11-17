@@ -68,7 +68,7 @@ function custom_tooltipy_glossary( $atts ) {
 
     while ( $q->have_posts() ) {
 	$q->the_post();
-	$pos_id = get_the_id();
+	$post_id = get_the_id();
         $slug = get_post_field( 'post_name' );
 
 	echo '<dt id="glossary-' . est_attr( $slug ) . '">';
