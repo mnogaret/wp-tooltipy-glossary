@@ -46,7 +46,8 @@ function custom_tooltipy_glossary( $atts ) {
 
     $tax_query = array();
     if ( $atts['cat'] !== '' ) {
-        $terms = array_map( 'trim', explode( ',', $atts['cat'] ) );
+        // $terms = array_map( 'trim', explode( ',', $atts['cat'] ) );
+        $terms = esc_html( $atts['cat'] );
         $tax_query = [ [
             'taxonomy' => 'tooltipy_category',
             'field'    => 'slug',
