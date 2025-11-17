@@ -72,7 +72,7 @@ function custom_tooltipy_glossary( $atts ) {
            . esc_html( get_the_title() )
            . '</dt>';
 
-        echo '<dd>' . wp_kses_post( get_the_content() ) . '</dd>';
+        echo '<dd>' . wp_kses_post( apply_filters( 'the_content', get_the_content() ) ) . '</dd>';
     }
 
     echo '</dl>';
