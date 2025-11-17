@@ -80,8 +80,12 @@ function custom_tooltipy_glossary( $atts ) {
         'posts_per_page' => -1,
         'orderby'        => 'title',
         'order'          => 'ASC',
-        'tax_query'      => $tax_query,
     ];
+
+    if ( ! empty( $tax_query ) ) {
+        $args['tax_query'] = $tax_query;
+    }
+
     $q = new WP_Query( $args );
     while ( $q->have_posts() ) {
         $q->the_post();
@@ -110,9 +114,11 @@ function custom_tooltipy_glossary( $atts ) {
         'posts_per_page' => -1,
         'orderby'        => $atts['orderby'],
         'order'          => $atts['order'],
-        'tax_query'      => $tax_query,
     ];
 
+    if ( ! empty( $tax_query ) ) {
+        $args['tax_query'] = $tax_query;
+    }
 
     $q = new WP_Query( $args );
 
