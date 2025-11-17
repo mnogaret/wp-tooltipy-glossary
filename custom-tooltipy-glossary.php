@@ -53,7 +53,7 @@ function custom_tooltipy_glossary( $atts ) {
             [
                 'taxonomy' => 'tooltipy_category',
                 'field'    => 'slug',
-                'terms'    => $terms,
+                'terms'    => 'patois-francais',
             ],
         ];
     }
