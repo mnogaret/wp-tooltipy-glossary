@@ -59,7 +59,11 @@ function custom_tooltipy_glossary( $atts ) {
     }
 
     $current_letter_class = '';
-    if ( empty ( $_GET['letter'] ) ) {
+    $chosen_letter = null;
+    if ( !empty ( $_GET['letter'] ) and $_GET['letter'] ) {
+        $chosen_letter = esc_html( $_GET["letter"] );
+    }
+    if ( $chosen_letter == null ) {
         $current_letter_class = 'bluet_glossary_current_letter';
     }
 
@@ -83,7 +87,7 @@ function custom_tooltipy_glossary( $atts ) {
     $q = new WP_Query( $args );
     while ( $q->have_posts() ) {
         $q->the_post();
-        $my_char = strtoupper( mb_substr( get_the_title(), 0, 1, 'utf-8' ) );
+	$my_char = strtoupper( mb_substr( get_the_title(), 0, 1, 'utf-8' ) );
         if ( empty( $chars_count[$my_char] ) ) {
             $chars_count[$my_char] = 0;
         }
@@ -95,8 +99,8 @@ function custom_tooltipy_glossary( $atts ) {
         $current_class = '';
         $glossary_page_url = get_permalink();
         $link_to_the_letter_page = add_query_arg( 'letter', $my_char, $glossary_page_url );
-        if ( !empty( $_GET['letter'] ) ) {
-            $current_letter_class = 'bluet_glossary_current_letter';
+        if ( $chosen_letter == $my_char ) {
+            $current_class = 'bluet_glossary_current_letter';
         }
         echo ' <span class="bluet_glossary_letter bluet_glossary_found_letter ' . $current_class . '"><a href=\'' . $link_to_the_letter_page . '\'>' . $my_char . '<span class="bluet_glossary_letter_count">' . $nb . '</span></a></span>';
     }
@@ -122,25 +126,28 @@ function custom_tooltipy_glossary( $atts ) {
 
     while ( $q->have_posts() ) {
         $q->the_post();
-        $post_id = get_the_ID();
-        $slug = get_post_field( 'post_name' );
+        $post_title = get_the_title();
+        if ( $chosen_letter == null or strtoupper( mb_substr( $post_title, 0, 1, 'utf-8' ) ) == $chosen_letter ) {
+            $post_id = get_the_ID();
+            $slug = get_post_field( 'post_name' );
 
-        echo '<dt id="glossary-' . esc_attr( $slug ) . '">';
+            echo '<dt id="glossary-' . esc_attr( $slug ) . '">';
 
-        echo '<h2 class="glossary_element_title">';
+            echo '<h2 class="glossary_element_title">';
 
-        echo '<span class="no-tooltipy">' . esc_html( get_the_title() ) . '</span>';
+            echo '<span class="no-tooltipy">' . esc_html( $post_title ) . '</span>';
 
-        if ( current_user_can( 'edit_post', $post_id ) ) {
-            $edit_link = get_edit_post_link( $post_id );
-            echo '&nbsp;<small>–&nbsp;<a href="' . esc_url( $edit_link ) . '">modifier</a></small>';
+            if ( current_user_can( 'edit_post', $post_id ) ) {
+                $edit_link = get_edit_post_link( $post_id );
+                echo '&nbsp;<small>–&nbsp;<a href="' . esc_url( $edit_link ) . '">modifier</a></small>';
+            }
+
+            echo '</h2>';
+
+            echo '</dt>';
+
+            echo '<dd>' . wp_kses_post( apply_filters( 'the_content', get_the_content() ) ) . '</dd>';
         }
-
-        echo '</h2>';
-
-        echo '</dt>';
-
-        echo '<dd>' . wp_kses_post( apply_filters( 'the_content', get_the_content() ) ) . '</dd>';
     }
 
     echo '</dl>';
