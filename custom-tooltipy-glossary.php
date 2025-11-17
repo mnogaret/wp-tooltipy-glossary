@@ -11,8 +11,6 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'WP_DEBUG', true );
-
 add_action( 'init', function() {
     register_taxonomy(
         'tooltipy_category',
@@ -123,7 +121,7 @@ function custom_tooltipy_glossary( $atts ) {
     $q = new WP_Query( $args );
 
     if ( ! $q->have_posts() ) {
-        return '<p>Aucun terme trouvé.</p>';
+        echo '<p>Aucun terme trouvé.</p>';
     }
 
     echo '<dl class="wp-custom-tooltipy-glossary">';
