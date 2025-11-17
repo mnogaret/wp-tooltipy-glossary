@@ -146,6 +146,8 @@ function custom_tooltipy_glossary( $atts ) {
     echo '</dl>';
     wp_reset_postdata();
 
+    echo '</div>';
+
     return ob_get_clean();
 }
 add_shortcode( 'custom_tooltipy_glossary', 'custom_tooltipy_glossary' );
