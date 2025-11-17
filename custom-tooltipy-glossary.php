@@ -68,9 +68,9 @@ function custom_tooltipy_glossary( $atts ) {
         $q->the_post();
         $slug = get_post_field( 'post_name' );
 
-        echo '<dt id="glossary-' . esc_attr( $slug ) . '">'
+        echo '<dt id="glossary-' . esc_attr( $slug ) . '"><h2 class="kktg_glossary_element_title"><a href="' . get_permalink() . '">'
            . esc_html( get_the_title() )
-           . '</dt>';
+           . '</a></h2></dt>';
 
         echo '<dd>' . wp_kses_post( apply_filters( 'the_content', get_the_content() ) ) . '</dd>';
     }
