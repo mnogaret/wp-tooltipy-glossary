@@ -79,7 +79,7 @@ function custom_tooltipy_glossary( $atts ) {
 
 	if ( current_user_can( 'edit_post', $post_id ) ) {
 		$edit_link = get_edit_post_link( $post_id );
-		echo '&nbsp;<small>(<a href="' . esc_url( $edit_link ) . '">modifier</a>)</small>';
+		echo '&nbsp;<small>–&nbsp;<a href="' . esc_url( $edit_link ) . '">modifier</a></small>';
 	}
 
 	echo '</h2>';
