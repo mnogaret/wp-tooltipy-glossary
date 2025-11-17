@@ -65,6 +65,7 @@ function custom_tooltipy_glossary( $atts ) {
 
     $all_link = get_permalink();
 
+    ob_start();
     echo '<div class="kttg_glossary_div">';
 
     echo '<div class="kttg_glossary_header"><span class="bluet_glossary_all ' . $current_letter_class . '"><a href=\'' . $all_link . '\'>' . $text_all . '</a></span> - ';
@@ -117,7 +118,6 @@ function custom_tooltipy_glossary( $atts ) {
         return '<p>Aucun terme trouvé.</p>';
     }
 
-    ob_start();
     echo '<dl class="wp-custom-tooltipy-glossary">';
 
     while ( $q->have_posts() ) {
