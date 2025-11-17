@@ -50,11 +50,9 @@ function custom_tooltipy_glossary( $atts ) {
     if ( $atts['cat'] !== '' ) {
         $terms = array_map( 'trim', explode( ',', $atts['cat'] ) );
         $tax_query = [
-            [
-                'taxonomy' => 'tooltipy_category',
-                'field'    => 'slug',
-                'terms'    => 'patois-francais',
-            ],
+            'taxonomy' => 'tooltipy_category',
+            'field'    => 'slug',
+            'terms'    => 'patois-francais',
         ];
     }
 
