@@ -1,3 +1,5 @@
+<?php
+
 add_action('wp_enqueue_scripts', function () {
     // Patch de tooltipy afin de ne pas supprimer certains espaces
     // Voir https://wordpress.org/support/topic/whitespace-lost-after-keyword/
