@@ -17,6 +17,7 @@ add_action('wp_enqueue_scripts', function () {
 
             // Si la regex contient déjà ' mais pas encore ’, on l’ajoute dans les classes de caractères
             // Exemple : [...']  ->  [...'\u2019]
+            console.log(src);
             if (src.indexOf("\u2019") === -1 && src.indexOf("'") !== -1) {
                 var patchedSrc = src.replace(/¤(?=])/g, "¤\u2019");
                 if (patchedSrc !== src) {
