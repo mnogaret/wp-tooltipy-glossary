@@ -10,6 +10,28 @@ add_action('wp_enqueue_scripts', function () {
     var original = window.findAndReplaceDOMText;
 
     function patchedFindAndReplaceDOMText(node, options) {
+
+        // --- PATCH 1 : élargir la RegExp "find" de Tooltipy pour inclure l’apostrophe typographique ’
+        if (options && options.find instanceof RegExp) {
+            var src = options.find.source;
+
+            // Si la regex contient déjà ' mais pas encore ’, on l’ajoute dans les classes de caractères
+            // Exemple : [...']  ->  [...'\u2019]
+            if (src.indexOf("\u2019") === -1 && src.indexOf("'") !== -1) {
+                console.log(src);
+                var patchedSrc = src.replace(/'(?=])/g, "'\u2019");
+                if (patchedSrc !== src) {
+                    console.log(" => " . patchedSrc);
+                    try {
+                        options.find = new RegExp(patchedSrc, options.find.flags);
+                    } catch (e) {
+                        // En cas d'erreur de reconstruction, on ne touche à rien
+                    }
+                }
+            }
+        }
+
+        // --- PATCH 2 : corriger le replace pour ne pas supprimer les portions constituées uniquement de whitespace
         if (options && typeof options.replace === 'function') {
             var origReplace = options.replace;
 
