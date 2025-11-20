@@ -145,11 +145,11 @@ function custom_tooltipy_glossary( $atts ) {
         $q->the_post();
         $post_title = get_the_title();
         $current_letter = get_first_letter( $post_title );
-        if ( $current_letter !== $previous_letter ) {
-            echo '<h1>— ' . $current_letter . ' —</h1>';
-            $previous_letter = $current_letter;
-        }
         if ( $chosen_letter == null or $current_letter == $chosen_letter ) {
+            if ( $current_letter !== $previous_letter ) {
+                echo '<h1>— ' . $current_letter . ' —</h1>';
+                $previous_letter = $current_letter;
+            }
             $post_id = get_the_ID();
             $slug = get_post_field( 'post_name' );
 
