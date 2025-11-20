@@ -140,10 +140,16 @@ function custom_tooltipy_glossary( $atts ) {
 
     echo '<dl class="wp-custom-tooltipy-glossary">';
 
+    $previous_letter = null;
     while ( $q->have_posts() ) {
         $q->the_post();
         $post_title = get_the_title();
-        if ( $chosen_letter == null or get_first_letter( $post_title ) == $chosen_letter ) {
+        $current_letter = get_first_letter( $post_title );
+        if ( $current_letter !== $previous_letter ) {
+            echo '<h1>— ' . $current_letter . ' —</h1>';
+            $previous_letter = $current_letter;
+        }
+        if ( $chosen_letter == null or $current_letter == $chosen_letter ) {
             $post_id = get_the_ID();
             $slug = get_post_field( 'post_name' );
 
