@@ -148,36 +148,36 @@ function custom_tooltipy_glossary( $atts ) {
 
     echo '<dl class="wp-custom-tooltipy-glossary">';
 
-    $previous_letter = null;
-    while ( $q->have_posts() ) {
-        $q->the_post();
-        $post_id = get_the_ID();
-        $post_title = get_the_title();
-        $custom_index_first_letter = get_post_meta( $post_id, 'custom-index-first-letter', true );
-        $current_letter = get_first_letter( $post_title, $custom_index_first_letter );
+    foreach ( $chars_count as $current_letter => $nb ) {
         if ( $chosen_letter == null or $current_letter == $chosen_letter ) {
-            if ( $current_letter !== $previous_letter ) {
-                echo '<h1>— ' . $current_letter . ' —</h1>';
-                $previous_letter = $current_letter;
+            echo '<h1>— ' . $current_letter . ' —</h1>';
+            while ( $q->have_posts() ) {
+                $q->the_post();
+                $post_id = get_the_ID();
+                $post_title = get_the_title();
+                $custom_index_first_letter = get_post_meta( $post_id, 'custom-index-first-letter', true );
+                $first_letter = get_first_letter( $post_title, $custom_index_first_letter );
+                if ( $first_letter == $current_letter ) {
+                    $slug = get_post_field( 'post_name' );
+
+                    echo '<dt id="glossary-' . esc_attr( $slug ) . '">';
+
+                    echo '<h2 class="glossary_element_title">';
+
+                    echo '<span class="no-tooltipy">' . esc_html( $post_title ) . '</span>';
+
+                    if ( current_user_can( 'edit_post', $post_id ) ) {
+                        $edit_link = get_edit_post_link( $post_id );
+                        echo '&nbsp;<small>–&nbsp;<a href="' . esc_url( $edit_link ) . '">modifier</a></small>';
+                    }
+
+                    echo '</h2>';
+
+                    echo '</dt>';
+
+                    echo '<dd>' . wp_kses_post( apply_filters( 'the_content', get_the_content() ) ) . '</dd>';
+                }
             }
-            $slug = get_post_field( 'post_name' );
-
-            echo '<dt id="glossary-' . esc_attr( $slug ) . '">';
-
-            echo '<h2 class="glossary_element_title">';
-
-            echo '<span class="no-tooltipy">' . esc_html( $post_title ) . '</span>';
-
-            if ( current_user_can( 'edit_post', $post_id ) ) {
-                $edit_link = get_edit_post_link( $post_id );
-                echo '&nbsp;<small>–&nbsp;<a href="' . esc_url( $edit_link ) . '">modifier</a></small>';
-            }
-
-            echo '</h2>';
-
-            echo '</dt>';
-
-            echo '<dd>' . wp_kses_post( apply_filters( 'the_content', get_the_content() ) ) . '</dd>';
         }
     }
 
