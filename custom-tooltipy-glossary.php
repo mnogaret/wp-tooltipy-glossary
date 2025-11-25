@@ -115,34 +115,26 @@ function custom_tooltipy_glossary( $atts ) {
     // Construction des lettres
     echo '<div class="kttg_glossary_header"><span class="bluet_glossary_all ' . $current_letter_class . '"><a href=\'' . $permalink . '\'>' . $text_all . '</a></span> - ';
 
-    $chars_count = [];
     $posts_by_letter = [];
     while ( $q->have_posts() ) {
         $q->the_post();
         $post_id = get_the_ID();
-        $first_letter = get_post_first_letter( $post_id );
-        if ( empty( $chars_count[ $first_letter ] ) ) {
-            $chars_count[ $first_letter ] = 0;
-            $posts_by_letter[ $first_letter ] = [];
-        }
-        $chars_count[ $first_letter ]++;
-        $posts_by_letter[ $first_letter ][] = $post_id;
+        $posts_by_letter[ get_post_first_letter( $post_id ) ][] = $post_id;
     }
     wp_reset_postdata();
 
-    ksort( $chars_count );
     ksort( $posts_by_letter );
 
     // Menu
 
-    foreach ( $chars_count as $my_char => $nb ) {
+    foreach ( $posts_by_letter as $letter => $posts ) {
         $current_class = '';
-        $glossary_page_url = $permalink;
-        $link_to_the_letter_page = add_query_arg( 'letter', $my_char, $glossary_page_url );
-        if ( $chosen_letter == $my_char ) {
+        if ( $chosen_letter == $letter ) {
             $current_class = 'bluet_glossary_current_letter';
         }
-        echo ' <span class="bluet_glossary_letter bluet_glossary_found_letter ' . $current_class . '"><a href=\'' . $link_to_the_letter_page . '\'>' . esc_html( $my_char ) . '<span class="bluet_glossary_letter_count">' . intval( $nb ) . '</span></a></span>';
+        $link_to_the_letter_page = esc_url( add_query_arg( 'letter', $letter, $permalink ) );
+        $count = count( $posts );
+        echo " <span class=\"bluet_glossary_letter bluet_glossary_found_letter {$current_class}\"><a href='{$link_to_the_letter_page}'>" . esc_html( $letter ) . "<span class=\"bluet_glossary_letter_count\">{$count}</span></a></span>";
     }
     echo '</div>';
 
@@ -151,16 +143,16 @@ function custom_tooltipy_glossary( $atts ) {
     echo '<div class="custom_glossary_content" style="margin-top: 20px;">';
     echo '<dl class="wp-custom-tooltipy-glossary">';
 
-    foreach ( $chars_count as $current_letter => $nb ) {
-        if ( $chosen_letter !== null && $current_letter !== $chosen_letter ) {
+    foreach ( $posts_by_letter as $letter => $posts ) {
+        if ( $chosen_letter !== null && $letter !== $chosen_letter ) {
             continue;
         }
-        echo '<h1>— ' . $current_letter . ' —</h1>';
-        if ( empty( $posts_by_letter[ $current_letter ] ) ) {
+        echo '<h1>— ' . $letter . ' —</h1>';
+        if ( empty( $posts ) ) {
             continue;
         }
 
-        foreach ( $posts_by_letter[ $current_letter ] as $post_id ) {
+        foreach ( $posts as $post_id ) {
             $post_title = get_the_title( $post_id );
             $slug = get_post_field( 'post_name', $post_id );
 
